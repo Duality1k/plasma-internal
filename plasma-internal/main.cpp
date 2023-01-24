@@ -6,6 +6,7 @@
 #include "config.h"
 #include "utils/utils.h"
 #include "render/render.hpp"
+#include "roblox/roblox.h"
 
 void MainThread() {
     const auto console = new Console();
@@ -15,6 +16,11 @@ void MainThread() {
     Log::InitStdOutHandle();
     Log::SetLogLevel(LogLevel::Medium);
 
+    __Ok("spy");
+    //const auto spy = new rbx::triggers::Spy();
+    __Ok("spy created");
+    //spy->Initialize();
+    __Ok("spy init");
 
     const auto obs = new render::OBS();
     obs->HookPresent([]() {

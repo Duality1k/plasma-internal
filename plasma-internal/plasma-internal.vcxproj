@@ -162,7 +162,11 @@
     <ClInclude Include="render\imgui\imstb_truetype.h" />
     <ClInclude Include="render\render.hpp" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="roblox\args_handler.hpp" />
+    <ClInclude Include="roblox\roblox.h" />
+    <ClInclude Include="roblox\triggers.hpp" />
     <ClInclude Include="utils\console.hpp" />
+    <ClInclude Include="utils\hooks.hpp" />
     <ClInclude Include="utils\lighlog.hpp" />
     <ClInclude Include="utils\memory.hpp" />
     <ClInclude Include="utils\utils.h" />

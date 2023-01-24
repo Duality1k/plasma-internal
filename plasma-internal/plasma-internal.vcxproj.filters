@@ -52,5 +52,9 @@
     <ClInclude Include="utils\xor.hpp" />
     <ClInclude Include="utils\utils.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="roblox\triggers.hpp" />
+    <ClInclude Include="utils\hooks.hpp" />
+    <ClInclude Include="roblox\roblox.h" />
+    <ClInclude Include="roblox\args_handler.hpp" />
   </ItemGroup>
 </Project>

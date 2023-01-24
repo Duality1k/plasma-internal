@@ -46,11 +46,11 @@ void Console::Attach()
 
 		static auto jmp = this->freeConsoleAddress + 0x6;
 
-		this->patchBackup1 = memory::read<std::uintptr_t*>(this->freeConsoleAddress + 0x2);
-		this->patchBackup2 = memory::read<std::uintptr_t>(this->freeConsoleAddress + 0x6);
+		this->patchBackup1 = utils::memory::read<std::uintptr_t*>(this->freeConsoleAddress + 0x2);
+		this->patchBackup2 = utils::memory::read<std::uintptr_t>(this->freeConsoleAddress + 0x6);
 
-		memory::write<std::uintptr_t*>(this->freeConsoleAddress + 0x2, &jmp);
-		memory::write<std::uintptr_t>(this->freeConsoleAddress + 0x6, 0xC3);
+		utils::memory::write<std::uintptr_t*>(this->freeConsoleAddress + 0x2, &jmp);
+		utils::memory::write<std::uintptr_t>(this->freeConsoleAddress + 0x6, 0xC3);
 
 		VirtualProtect(reinterpret_cast<void*>(this->freeConsoleAddress), 0x6, prot, &prot);
 	}
@@ -76,8 +76,8 @@ void Console::Detach()
 		DWORD prot{ 0u };
 		VirtualProtect(reinterpret_cast<void*>(this->freeConsoleAddress), 0x6, PAGE_EXECUTE_READWRITE, &prot);
 
-		memory::write<std::uintptr_t*>(this->freeConsoleAddress + 0x2, this->patchBackup1);
-		memory::write<std::uintptr_t>(this->freeConsoleAddress + 0x6, this->patchBackup2);
+		utils::memory::write<std::uintptr_t*>(this->freeConsoleAddress + 0x2, this->patchBackup1);
+		utils::memory::write<std::uintptr_t>(this->freeConsoleAddress + 0x6, this->patchBackup2);
 
 		VirtualProtect(reinterpret_cast<void*>(this->freeConsoleAddress), 0x6, prot, &prot);
 	}
