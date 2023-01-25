@@ -6,8 +6,7 @@ namespace rbx
 	const std::uintptr_t BaseAddress = reinterpret_cast<std::uintptr_t>(GetModuleHandleA(nullptr));
       	const std::uintptr_t LuaVM_load = BaseAddress + 0x33C840;
         const std::uintptr_t defer = BaseAddress + 0x3B50B0;
-	const std::uintptr_t invoke_server = BaseAddress + 0x1098A30;
-	const std::uintptr_t fire_server = NULL;
+	const std::uintptr_t fire_server = BaseAddress + 0xF16050;
 	
 	namespace offsets
 	{	
