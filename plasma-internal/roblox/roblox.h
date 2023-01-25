@@ -22,6 +22,27 @@ namespace rbx
 		}
 	}
 
+    namespace sdk
+    {
+        typedef UINT* vftable;
+
+        struct ClassDescriptor {
+            char padding2[0x4];
+            std::string* class_name;
+        };
+
+        struct Instance {
+            vftable vftable;
+            std::shared_ptr<Instance> self;
+            ClassDescriptor* classDescriptor;
+            char padding1[0x14];
+            std::string* name;
+            std::vector<Instance*>* children;
+            char padding2[0x4];
+            Instance* parent;
+        };
+    }
+
 	namespace funcs
 	{
         std::string ReadUnknownLengthString(std::uintptr_t address)
@@ -63,28 +84,26 @@ namespace rbx
             }
         }
 
-        std::uintptr_t GetInstanceParent(std::uintptr_t address)
+        rbx::sdk::Instance* GetInstanceParent(rbx::sdk::Instance* instance)
         {
-            return memory::read<std::uintptr_t>(address + rbx::offsets::parent);
+            return instance->parent;
         }
 
-        std::string GetInstanceName(std::uintptr_t address)
+        std::string GetInstanceName(rbx::sdk::Instance* instance)
         {
-            std::uintptr_t name_address = memory::read<std::uintptr_t>(address + rbx::offsets::name);
-
-            return ReadString(name_address);
+            return instance->name->c_str();
         }
 
-        std::string GetInstancePath(std::uintptr_t address)
+        std::string GetInstancePath(rbx::sdk::Instance* instance)
         {
-            std::string path = GetInstanceName(address);
-
-            std::uintptr_t parent = GetInstanceParent(address);
+            std::printf("GetInstanceName");
+            auto path = GetInstanceName(instance);
+            std::printf("GetInstanceParent");
+            auto parent = GetInstanceParent(instance);
 
             while (parent)
             {
                 path = GetInstanceName(parent) + "." + path;
-
                 parent = GetInstanceParent(parent);
             }
 

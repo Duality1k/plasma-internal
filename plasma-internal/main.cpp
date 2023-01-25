@@ -16,10 +16,20 @@ void MainThread() {
     Log::InitStdOutHandle();
     Log::SetLogLevel(LogLevel::Medium);
 
+    //DWORD original;
+    //BYTE* patch_start = reinterpret_cast<BYTE*>(&SetUnhandledExceptionFilter);
+    //VirtualProtect(patch_start, 5, PAGE_EXECUTE_READWRITE, &original);
+    //*(patch_start + 0) = 0x8B;
+    //*(patch_start + 1) = 0xFF;
+    //*(patch_start + 2) = 0x55;
+    //*(patch_start + 3) = 0x8B;
+    //*(patch_start + 4) = 0xEC;
+    //VirtualProtect(patch_start, 5, original, &original);
+
     __Ok("spy");
-    //const auto spy = new rbx::triggers::Spy();
+    const auto spy = new rbx::triggers::Spy();
     __Ok("spy created");
-    //spy->Initialize();
+    spy->Initialize();
     __Ok("spy init");
 
     const auto obs = new render::OBS();
@@ -37,7 +47,6 @@ void MainThread() {
 
         if (config::bShowMenu)
         {
-            __Warn("ImGui::Render");
             ImGui::Begin(xor ("Plasma"));
 
             ImGui::Button("gay retard", ImVec2{ 200, 50 });

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <array>
 
-#define ARG_STRUCT_SIZE 0x48
+#define ARG_STRUCT_SIZE 0x24
 
 namespace rbx
 {
@@ -71,7 +71,7 @@ namespace rbx
         {
             if (std::strcmp(element.name, "Instance") == 0)
             {
-                const auto instance = *reinterpret_cast<std::uintptr_t*>(data.data);
+                const auto instance = *reinterpret_cast<rbx::sdk::Instance**>(data.data);
 
                 const auto name = funcs::GetInstancePath(instance);
 
@@ -124,6 +124,8 @@ namespace rbx
 
     void HandleVector(std::uintptr_t args, bool is_deep = false)
     {
+        std::printf("HandleVector, args: 0x%x\n", args);
+        getchar();
         const auto vector_start = *reinterpret_cast<std::uintptr_t*>(args);
         const auto vector_end = *reinterpret_cast<std::uintptr_t*>(args + 4);
 
@@ -140,9 +142,10 @@ namespace rbx
             const auto arg = vector_start + (i * ARG_STRUCT_SIZE);
 
             const auto arg_type = *reinterpret_cast<std::uintptr_t*>(arg);
-            const auto arg_type_name = rbx::funcs::ReadString(arg_type + 4);
+            std::printf("pArgType 0x%x\n", arg);
+            const auto arg_type_name = memory::read<std::string>(arg_type + 4);
+            std::printf("ArgType %i: %s\n", i, arg_type_name.c_str());
 
-            std::printf("\nArg Type %i: %s\n", i, arg_type_name.c_str());
 
             if (std::strcmp(arg_type_name.c_str(), "Array") == 0)
             {

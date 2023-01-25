@@ -25,26 +25,23 @@ namespace rbx
 
         void __fastcall FireServerHook(std::uintptr_t this_ptr, std::uintptr_t edx, std::uintptr_t args, std::uint8_t unk)
         {
-            const auto remote_path = rbx::funcs::GetInstancePath(this_ptr);
+            std::printf("FireServerDetour\n");
+            const auto instance = reinterpret_cast<rbx::sdk::Instance*>(this_ptr);
+            std::printf("Instance: 0x%x\n", instance);
+            const auto remote_path = rbx::funcs::GetInstancePath(instance);
+            std::printf("FireServer Called: %s\n", remote_path.c_str());
 
             if (remote_path == BLACKLISTED_PATH)
                 return;
 
-            std::printf("---START---\n\n");
-
-            std::printf("FireServer Called: %s\n", remote_path.c_str());
-
             if (!args)
             {
                 std::printf("Number of Args: 0\n");
-                std::printf("\n---END---\n\n");
 
                 return SpyManager->OriginalFireServer(this_ptr, args, unk);
             }
 
             HandleVector(args);
-
-            std::printf("\n---END---\n\n");
 
             return SpyManager->OriginalFireServer(this_ptr, args, unk);
         }
@@ -65,9 +62,9 @@ namespace rbx
                 6
             );
 
-            //const auto hookAddr = TrampHook->Place();
+            const auto hookAddr = TrampHook->Place();
 
-            //this->OriginalFireServer = reinterpret_cast<rbx::triggers::FireServer>(hookAddr);
+            this->OriginalFireServer = reinterpret_cast<rbx::triggers::FireServer>(hookAddr);
         }
 
         bool Spy::Render() {
