@@ -3,22 +3,19 @@
 
 namespace rbx
 {
-	inline std::uintptr_t BaseAddress = reinterpret_cast<std::uintptr_t>(GetModuleHandleA(nullptr));
-
+	const std::uintptr_t BaseAddress = reinterpret_cast<std::uintptr_t>(GetModuleHandleA(nullptr));
+      	const std::uintptr_t LuaVM_load = BaseAddress + 0x33C840;
+        const std::uintptr_t defer = BaseAddress + 0x3B50B0;
+	const std::uintptr_t invoke_server = BaseAddress + 0x1098A30;
+	const std::uintptr_t fire_server = NULL;
+	
 	namespace offsets
-	{
-		inline std::uintptr_t invoke_server = NULL;
-		inline std::uintptr_t fire_server = NULL;
-		
+	{	
 		constexpr std::uint16_t parent = 0x34;
 		constexpr std::uint16_t name = 0x28;
 		constexpr std::uint16_t string_length = 0x14;
 
 		void FindFireServer() {
-            __Warn("invoke_server");
-            invoke_server = BaseAddress + 0x1095DB0;
-            __Warn("fire_server");
-			fire_server = BaseAddress + 0x1098A30;
 		}
 	}
 
