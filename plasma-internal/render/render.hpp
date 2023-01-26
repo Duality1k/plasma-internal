@@ -1,12 +1,5 @@
 #pragma once
 
-#include <dxgi.h>
-#include <d3d11.h>
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
-
 using namespace utils;
 
 #define OBS_PRESENT 0x32E6C // OBS module .rdata pRealPresent offset
@@ -18,9 +11,6 @@ namespace render
 {
 	typedef HRESULT(WINAPI* Present)(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 	typedef HRESULT(STDMETHODCALLTYPE* ResizeBuffers)(IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT);
-
-
-
 
 	class OBS
 	{
@@ -132,6 +122,7 @@ namespace render
 			ImGui::CreateContext();
 			ImGui_ImplWin32_Init(Window);
 			ImGui_ImplDX11_Init(Obs->pDevice, Obs->pContext);
+			ImGui::StyleColorsDark();
 
 			// Get the address of the original ResizeBuffers method
 			Obs->OriginalResizeBuffers = memory::read<ResizeBuffers>(Obs->ModuleBase + OBS_RESIZEBUFFER);

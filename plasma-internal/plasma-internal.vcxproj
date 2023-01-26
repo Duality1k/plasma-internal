@@ -37,7 +37,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -90,14 +90,17 @@
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>
+      </SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;PLASMAINTERNAL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>Default</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -105,6 +108,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
+      <AdditionalDependencies>roblox/compression/Lib/libzstd_static.lib;roblox/compression/Lib/xxhash.lib;roblox/luau/isocline.lib;roblox/luau/Luau.Ast.lib;roblox/luau/Luau.CodeGen.lib;roblox/luau/Luau.Compiler.lib;roblox/luau/Luau.VM.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -142,28 +146,80 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Downloads\1011\backends\imgui_impl_dx11.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="render\imgui\custom.cpp" />
     <ClCompile Include="render\imgui\imgui.cpp" />
     <ClCompile Include="render\imgui\imgui_demo.cpp" />
     <ClCompile Include="render\imgui\imgui_draw.cpp" />
     <ClCompile Include="render\imgui\imgui_impl_dx11.cpp" />
     <ClCompile Include="render\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="render\imgui\imgui_tables.cpp" />
+    <ClCompile Include="render\imgui\imgui_tricks.cpp" />
     <ClCompile Include="render\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Downloads\1011\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="render\imgui\custom.hpp" />
+    <ClInclude Include="render\imgui\font.hpp" />
     <ClInclude Include="render\imgui\imconfig.h" />
     <ClInclude Include="render\imgui\imgui.h" />
     <ClInclude Include="render\imgui\imgui_impl_dx11.h" />
     <ClInclude Include="render\imgui\imgui_impl_win32.h" />
     <ClInclude Include="render\imgui\imgui_internal.h" />
+    <ClInclude Include="render\imgui\imgui_tricks.hpp" />
     <ClInclude Include="render\imgui\imstb_rectpack.h" />
     <ClInclude Include="render\imgui\imstb_textedit.h" />
     <ClInclude Include="render\imgui\imstb_truetype.h" />
     <ClInclude Include="render\render.hpp" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="roblox\args_handler.hpp" />
+    <ClInclude Include="roblox\compression\xxhash.h" />
+    <ClInclude Include="roblox\compression\zstd.h" />
+    <ClInclude Include="roblox\executor.hpp" />
+    <ClInclude Include="roblox\luau\Ast.h" />
+    <ClInclude Include="roblox\luau\BuiltinFolding.h" />
+    <ClInclude Include="roblox\luau\Builtins.h" />
+    <ClInclude Include="roblox\luau\Bytecode.h" />
+    <ClInclude Include="roblox\luau\BytecodeBuilder.h" />
+    <ClInclude Include="roblox\luau\Common.h" />
+    <ClInclude Include="roblox\luau\Compiler.h" />
+    <ClInclude Include="roblox\luau\Confusables.h" />
+    <ClInclude Include="roblox\luau\ConstantFolding.h" />
+    <ClInclude Include="roblox\luau\CostModel.h" />
+    <ClInclude Include="roblox\luau\DenseHash.h" />
+    <ClInclude Include="roblox\luau\ExperimentalFlags.h" />
+    <ClInclude Include="roblox\luau\lapi.h" />
+    <ClInclude Include="roblox\luau\lbuiltins.h" />
+    <ClInclude Include="roblox\luau\lbytecode.h" />
+    <ClInclude Include="roblox\luau\lcommon.h" />
+    <ClInclude Include="roblox\luau\ldebug.h" />
+    <ClInclude Include="roblox\luau\ldo.h" />
+    <ClInclude Include="roblox\luau\Lexer.h" />
+    <ClInclude Include="roblox\luau\lfunc.h" />
+    <ClInclude Include="roblox\luau\lgc.h" />
+    <ClInclude Include="roblox\luau\lmem.h" />
+    <ClInclude Include="roblox\luau\lnumutils.h" />
+    <ClInclude Include="roblox\luau\lobject.h" />
+    <ClInclude Include="roblox\luau\Location.h" />
+    <ClInclude Include="roblox\luau\lstate.h" />
+    <ClInclude Include="roblox\luau\lstring.h" />
+    <ClInclude Include="roblox\luau\ltable.h" />
+    <ClInclude Include="roblox\luau\ltm.h" />
+    <ClInclude Include="roblox\luau\lua.h" />
+    <ClInclude Include="roblox\luau\luacode.h" />
+    <ClInclude Include="roblox\luau\luaconf.h" />
+    <ClInclude Include="roblox\luau\lualib.h" />
+    <ClInclude Include="roblox\luau\ludata.h" />
+    <ClInclude Include="roblox\luau\lvm.h" />
+    <ClInclude Include="roblox\luau\ParseOptions.h" />
+    <ClInclude Include="roblox\luau\Parser.h" />
+    <ClInclude Include="roblox\luau\ParseResult.h" />
+    <ClInclude Include="roblox\luau\StringUtils.h" />
+    <ClInclude Include="roblox\luau\TableShape.h" />
+    <ClInclude Include="roblox\luau\TimeTrace.h" />
+    <ClInclude Include="roblox\luau\ValueTracking.h" />
     <ClInclude Include="roblox\roblox.h" />
+    <ClInclude Include="roblox\scheduler.hpp" />
     <ClInclude Include="roblox\triggers.hpp" />
     <ClInclude Include="utils\console.hpp" />
     <ClInclude Include="utils\hooks.hpp" />

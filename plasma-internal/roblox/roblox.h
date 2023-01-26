@@ -1,21 +1,36 @@
 #pragma once
 
-
 namespace rbx
 {
-	const std::uintptr_t BaseAddress = reinterpret_cast<std::uintptr_t>(GetModuleHandleA(nullptr));
-      	const std::uintptr_t LuaVM_load = BaseAddress + 0x33C840;
-        const std::uintptr_t defer = BaseAddress + 0x3B50B0;
-	const std::uintptr_t fire_server = BaseAddress + 0x1076050;
-	
-	namespace offsets
-	{	
-		constexpr std::uint16_t parent = 0x34;
-		constexpr std::uint16_t name = 0x28;
-		constexpr std::uint16_t string_length = 0x14;
+    namespace typedefs
+    {
+        using luau_load = int(__fastcall*)(std::uintptr_t rL, std::string* source, const char* chunkname, int env);
+        using task_defer = int(__cdecl*)(std::uintptr_t rL);
+        using get_task_scheduler = int(__cdecl*)();
+    }
 
-		void FindFireServer() {
-		}
+    namespace addresses
+    {
+        const std::uintptr_t base = reinterpret_cast<std::uintptr_t>(GetModuleHandleA(nullptr));
+        const std::uintptr_t luavm_load(base + 0x33C840);
+        const std::uintptr_t task_defer(base + 0x3B50B0);
+        const std::uintptr_t fire_server(base + 0x1076050);
+        const std::uintptr_t task_scheduler(base + 0x6F5CF0);
+    }
+
+	namespace offsets
+	{
+        // instances
+		constexpr std::uint16_t parent(0x34);
+		constexpr std::uint16_t name(0x28);
+		constexpr std::uint16_t string_length(0x14);
+
+        // task scheduler
+        constexpr std::uintptr_t job_start(0x134);
+        constexpr std::uintptr_t job_end(0x138);
+        constexpr std::uintptr_t job_name(0x10);
+
+        constexpr std::uintptr_t script_context(0x130);
 	}
 
     namespace sdk
@@ -41,60 +56,25 @@ namespace rbx
 
 	namespace funcs
 	{
-        std::string ReadUnknownLengthString(std::uintptr_t address)
+        namespace lua
         {
-            std::string res;
-            char character = 0;
-            int char_size = sizeof(character);
-            int offset = 0;
+            const auto luavm_load = reinterpret_cast<typedefs::luau_load>(addresses::luavm_load);
+            const auto task_defer = reinterpret_cast<typedefs::task_defer>(addresses::task_defer);
+            const auto get_task_scheduler = reinterpret_cast<typedefs::get_task_scheduler>(addresses::task_scheduler);
 
-            res.reserve(204); // 4 * 51 = 204
-
-            while (offset < 200)
-            {
-                character = *reinterpret_cast<char*>(address + offset);
-
-                if (character == 0) break;
-
-                offset += char_size;
-
-                res.push_back(character);
-            }
-
-            return res;
-        }
-
-        std::string ReadString(std::uintptr_t str_address)
-        {
-            const auto length = memory::read<int>(str_address + rbx::offsets::string_length);
-
-            if (length >= 16u)
-            {
-                const auto new_name_address = *reinterpret_cast<std::uintptr_t*>(str_address);
-                return ReadUnknownLengthString(new_name_address);
-            }
-            else
-            {
-                const auto name = ReadUnknownLengthString(str_address);
-                return name;
+            std::uintptr_t getstate(std::uintptr_t ScriptContext) {
+                // needs to be updated every wednesday
+                return 0;
             }
         }
 
-        rbx::sdk::Instance* GetInstanceParent(rbx::sdk::Instance* instance)
-        {
-            return instance->parent;
-        }
+        rbx::sdk::Instance* GetInstanceParent(rbx::sdk::Instance* instance) { return instance->parent; }
 
-        std::string GetInstanceName(rbx::sdk::Instance* instance)
-        {
-            return instance->name->c_str();
-        }
+        std::string GetInstanceName(rbx::sdk::Instance* instance) { return instance->name->c_str(); }
 
         std::string GetInstancePath(rbx::sdk::Instance* instance)
         {
-            std::printf("GetInstanceName");
             auto path = GetInstanceName(instance);
-            std::printf("GetInstanceParent");
             auto parent = GetInstanceParent(instance);
 
             while (parent)
@@ -108,5 +88,5 @@ namespace rbx
 	}
 }
 
-#include "args_handler.hpp"
+#include "scheduler.hpp"
 #include "triggers.hpp"

@@ -1,5 +1,4 @@
 #pragma once
-
 #define BLACKLISTED_PATH "Game.RobloxReplicatedStorage.IntegrityCheckProcessorKey_LocalizationTableEntryStatisticsSender_LocalizationService"
 
 namespace rbx
@@ -41,7 +40,10 @@ namespace rbx
                 return SpyManager->OriginalFireServer(this_ptr, args, unk);
             }
 
-            HandleVector(args);
+            //HandleVector(args);
+            std::printf("args: 0x%x", args);
+            const auto args1 = memory::read<uintptr_t>(args);
+            std::printf("args1: 0x%x", args1);
 
             return SpyManager->OriginalFireServer(this_ptr, args, unk);
         }
@@ -50,14 +52,9 @@ namespace rbx
 
         void Spy::Initialize() {
 
-            // pattern scan FireServer & InvokeServer
-            __Warn("FindFireServer");
-            rbx::offsets::FindFireServer();
-            __Ok("Pattern scan ok");
-
             // place detour
             TrampHook = new utils::hooks::TrampolineHook(
-                rbx::offsets::fire_server,
+                rbx::addresses::fire_server,
                 (uintptr_t)rbx::triggers::FireServerHook,
                 6
             );
